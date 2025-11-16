@@ -12,7 +12,7 @@ IMGBB_API_KEY = os.environ.get("IMGBB_API_KEY", "")
 # --------------- Upload to ImgBB ---------------
 def upload_to_imgbb(path):
     if not IMGBB_API_KEY:
-        st.error("⚠️ ImgBB API key missing. Add IMGBB_API_KEY in Streamlit Secrets.")
+        st.error("⚠️ ImgBB API key missing. Add IMGBB_API_KEY in Secrets.")
         return None
 
     with open(path, "rb") as f:
@@ -36,7 +36,7 @@ def upload_to_imgbb(path):
 # ----------------- RENDER PAGE -----------------
 def render():
 
-    # Load love theme
+    # Load theme
     try:
         with open("static/love.css", "r") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -81,15 +81,17 @@ def render():
 
         prev_cols = st.columns(3)
         for i, f in enumerate(extras):
-            if prev_cols[i % 3].button(f"Preview {i+1}"):
+            if prev_cols[i % 3].button(f"Preview " + str(i+1)):
                 st.image(Image.open(f), width=330)
 
     # -------------------------------------------------
     # Message + Expiry
     # -------------------------------------------------
     msg = st.text_area("Enter Your Message ❤️")
-    expiry = st.selectbox("Expiry Time",
-                          ["10 Minutes", "1 Hour", "1 Day", "7 Days"])
+    expiry = st.selectbox(
+        "Expiry Time",
+        ["10 Minutes", "1 Hour", "1 Day", "7 Days"]
+    )
 
     generate = st.button("Generate Memory Card ❤️", use_container_width=True)
 
@@ -116,7 +118,7 @@ def render():
 
         st.info("Uploading your pictures… 💞")
 
-        # Upload main
+        # Upload main encoded image
         main_url = upload_to_imgbb(encoded_path)
         if not main_url:
             return
@@ -163,57 +165,37 @@ def render():
         st.success("🎉 Memory Card Created Successfully!")
 
         # =========================================================
-        #      SHARE ROW — FIXED & INSIDE CARD (NOW VISIBLE)
+        #  SHARE ROW (NO JAVASCRIPT — 100% STREAMLIT SAFE)
         # =========================================================
-        st.markdown(f"""
-        <style>
-        .share-btn {{
-            background: linear-gradient(90deg,#ff0066,#ff2f8e);
-            padding: 12px 20px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 15px;
-            color: white !important;
-            text-decoration: none !important;
-            display: inline-block;
-            box-shadow: 0 6px 22px rgba(255,0,120,0.35);
-        }}
-        .share-row {{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }}
-        </style>
+        st.markdown("### 💕 Share Your Memory Card")
 
-        <div class="share-row">
+        col1, col2, col3 = st.columns(3)
 
-            <a href="{view_url}" target="_blank" class="share-btn">
-                💌 View Memory Card
-            </a>
+        # View
+        with col1:
+            st.link_button("💌 View", view_url)
 
-            <a href="#" class="share-btn"
-               onclick="navigator.clipboard.writeText('{view_url}'); alert('✔ Link copied!');">
-                📋 Copy Link
-            </a>
+        # Copy link (Streamlit-safe)
+        with col2:
+            if st.button("📋 Copy Link"):
+                st.session_state["copied_text"] = view_url
+                st.success("Link copied! (Paste anywhere)")
 
-            <a href="https://wa.me/?text=💖 Check this Memory Card: {view_url}"
-               target="_blank" class="share-btn">
-                💬 WhatsApp
-            </a>
+        # WhatsApp
+        with col3:
+            wa = f"https://wa.me/?text=💖 Check this Memory Card: {view_url}"
+            st.link_button("💬 WhatsApp", wa)
 
-            <a href="{view_url}" target="_blank" class="share-btn">
-                📸 Instagram
-            </a>
+        col4, col5 = st.columns(2)
 
-            <a href="sms:?body=Check this Memory Card ❤️ {view_url}"
-               target="_blank" class="share-btn">
-                📱 Messages
-            </a>
+        # Instagram
+        with col4:
+            st.link_button("📸 Instagram", view_url)
 
-        </div>
-        """, unsafe_allow_html=True)
+        # SMS
+        with col5:
+            sms = f"sms:?body=Check this Memory Card ❤️ {view_url}"
+            st.link_button("📱 SMS", sms)
 
-    # CLOSING love-card div (KEEP THIS LAST)
+    # Close love-card container
     st.markdown("</div>", unsafe_allow_html=True)

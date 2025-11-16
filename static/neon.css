@@ -1,151 +1,120 @@
-/* ---------------------------
-   TRUE Glassmorphism UI Fix
-   --------------------------- */
+/* -------------------------------------------------------
+   FULL GLASSMORPHISM NEON THEME — FINAL STABLE VERSION
+   ------------------------------------------------------- */
 
+/* Background */
 html, body, .main, [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #0d1117 0%, #0f1620 50%, #0b0f19 100%);
-    color: #e6f0ff !important;
+    background: linear-gradient(135deg, #0d1117 0%, #0f1620 50%, #0b0f19 100%) !important;
+    color: #e8f5ff !important;
 }
 
-/* Fix Streamlit default white blocks */
+/* Remove the top Streamlit white bar */
+header[data-testid="stHeader"] {
+    background: transparent !important;
+    height: 0px !important;
+}
+
+/* Sidebar glass */
 [data-testid="stSidebar"] {
-    background: rgba(255,255,255,0.04) !important;
-    backdrop-filter: blur(18px);
+    background: rgba(255,255,255,0.05) !important;
+    backdrop-filter: blur(16px);
     border-right: 1px solid rgba(255,255,255,0.15);
 }
 
-/* Sidebar text visibility */
+/* Sidebar text always white */
 [data-testid="stSidebar"] * {
-    color: #e8f7ff !important;
+    color: #e8f5ff !important;
 }
 
-/* Center container cards */
+/* Glass card used in main page */
 .glass-card {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.07);
     backdrop-filter: blur(14px);
     border-radius: 16px;
     padding: 24px;
-    margin-top: 12px;
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.14);
     box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    margin-top: 12px;
 }
 
-/* Input fields */
+/* Input fields — text BLACK */
 input, textarea, .stTextInput input {
-    background: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.18) !important;
-    color: #000000 !important;   /* TEXT IS NOW BLACK */
+    background: rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(255,255,255,0.25) !important;
+    color: #000000 !important;     /* BLACK TEXT HERE */
     border-radius: 12px !important;
     padding: 10px !important;
+    font-weight: 600;
 }
 
-/* Upload box fix */
+/* ------------------------------
+   FILE UPLOADER CUSTOMIZATION
+   ------------------------------ */
+
+/* Drag & drop area background */
 [data-testid="stFileUploaderDropzone"] {
-    background: rgba(255,255,255,0.05) !important;
+    background: rgba(255,255,255,0.08) !important;
     border: 1px solid rgba(255,255,255,0.20) !important;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
 }
 
-[data-testid="stFileUploaderDropzone"] * {
-    color: #fff !important;
-}
-
-/* Buttons */
-.stButton > button {
-    background: linear-gradient(90deg, #00eaff, #9c4dff);
-    color: white;
-    font-weight: 700;
-    border-radius: 12px;
-    border: none;
-    padding: 10px 18px;
-    box-shadow: 0 0 12px rgba(0,200,255,0.35);
-    transition: 0.25s ease;
-}
-
-.stButton > button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 20px rgba(0,200,255,0.55);
-}
-
-/* ---------------------------
-   Uploader: dropzone white, button black
-   Place this at the BOTTOM of neon.css
-   --------------------------- */
-
-/* 1) Make all dropzone (drag & drop) texts white */
-[data-testid="stFileUploaderDropzone"], 
-[data-testid="stFileUploaderDropzone"] * {
-  color: #ffffff !important;
-}
-
-/* 2) Keep label/title text white (Upload Cover PNG etc.) */
-[data-testid="stFileUploader"] > div > div,
-[data-testid="stFileUploader"] label,
-[data-testid="stFileUploader"] span {
-  color: #ffffff !important;
-}
-
-/* 3) But force the actual "Browse files" button to be black text on a light bg.
-   Use a more specific selector so it wins over the white rules above. */
-[data-testid="stFileUploader"] section div button,
-[data-testid="stFileUploader"] button {
-  color: #000000 !important;                       /* black text */
-  background: rgba(255,255,255,0.92) !important;   /* light background so black is readable */
-  border-radius: 10px !important;
-  border: 1px solid rgba(0,0,0,0.06) !important;
-  box-shadow: none !important;
-}
-
-/* 4) Improve button contrast slightly (optional) */
-[data-testid="stFileUploader"] section div button:hover,
-[data-testid="stFileUploader"] button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08) !important;
-}
-
-/* Fix top white shadow bar */
-header[data-testid="stHeader"] {
-    background: transparent !important;
-    height: 0;
-}
-
-/* Make "Browse files" text black */
-[data-testid="stFileUploader"] section div button {
-    color: #000 !important;             /* text color */
-    background: rgba(255,255,255,0.8) !important;  /* optional: lighter background */
-    border-radius: 10px !important;
-}
-
-/* Make other uploader text black */
-[data-testid="stFileUploader"] * {
-    color: #000 !important;
-}
-
-/* Make uploader label text white */
-label, .stFileUploader label {
-    color: #ffffff !important;
-}
-
-
-/* Drag & Drop zone main text white */
-[data-testid="stFileUploaderDropzone"] div {
-    color: #ffffff !important;
-}
-
-/* Inner texts inside dropzone */
+/* Drag & drop text → WHITE */
 [data-testid="stFileUploaderDropzone"] * {
     color: #ffffff !important;
 }
 
-/* 'Upload Cover PNG' style (Streamlit wraps it in a div) */
-[data-testid="stFileUploader"] > div > div {
-    color: #ffffff !important;
-}
-
-/* Force uploader LABEL text (“Upload Cover PNG”, “Upload encoded PNG”) to be white */
+/* Label text (“Upload Cover PNG”, “Upload encoded PNG”) → WHITE */
 [data-testid="stFileUploader"] label,
 [data-testid="stFileUploader"] > div > div:first-child,
 [data-testid="stFileUploader"] span {
     color: #ffffff !important;
 }
 
+/* "Browse files" BUTTON → BLACK TEXT + LIGHT BG */
+[data-testid="stFileUploader"] section div button,
+[data-testid="stFileUploader"] button {
+    color: #000000 !important;                         /* black text */
+    background: rgba(255,255,255,0.89) !important;     /* light BG */
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+    padding: 6px 12px !important;
+    border: 1px solid rgba(0,0,0,0.12) !important;
+}
+
+/* Hover effect for Browse button */
+[data-testid="stFileUploader"] button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.20) !important;
+}
+
+/* ------------------------------
+   Buttons (Encode / Decode / Reset)
+   ------------------------------ */
+.stButton > button {
+    background: linear-gradient(90deg, #00eaff, #a34dff);
+    color: white !important;
+    font-weight: 700;
+    border-radius: 12px;
+    border: none;
+    padding: 10px 18px;
+    box-shadow: 0px 0px 14px rgba(0,220,255,0.45);
+    transition: 0.25s ease;
+}
+
+.stButton > button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 0px 22px rgba(0,220,255,0.65);
+}
+
+/* Code block styling */
+code, .stCode {
+    color: #00eaff !important;
+    font-weight: 600;
+}
+
+/* Titles with glowing gradient */
+h1, h2, h3 {
+    background: linear-gradient(90deg, #00eaff, #b400ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

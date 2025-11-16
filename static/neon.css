@@ -142,3 +142,10 @@ label, .stFileUploader label {
     color: #ffffff !important;
 }
 
+/* Force uploader LABEL text (“Upload Cover PNG”, “Upload encoded PNG”) to be white */
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] > div > div:first-child,
+[data-testid="stFileUploader"] span {
+    color: #ffffff !important;
+}
+

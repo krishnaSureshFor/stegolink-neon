@@ -1,19 +1,17 @@
 import streamlit as st
 from PIL import Image
-import tempfile, os
+import tempfile, os, webbrowser
 from stego.simple_lsb import hide_text, reveal_text
 
-# Page config
 st.set_page_config(page_title="StegoLink Neon Glass", layout="wide")
 
 # Load CSS
 with open("static/neon.css", "r") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Title
 st.markdown("<h1>🛰️ StegoLink — Glassmorphism Edition</h1>", unsafe_allow_html=True)
 
-# ---- SIDEBAR (ENCODER) ----
+# ------------------- SIDEBAR: ENCODER -------------------
 st.sidebar.markdown("<div class='glass-card'>", unsafe_allow_html=True)
 st.sidebar.header("🔏 Encode Text Into PNG")
 
@@ -36,25 +34,45 @@ if st.sidebar.button("Encode & Generate"):
 
 st.sidebar.markdown("</div>", unsafe_allow_html=True)
 
-
-# ---- MAIN PANEL (DECODER) ----
+# ------------------- MAIN PANEL: DECODER -------------------
 st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
 st.header("🔓 Decode Hidden Text")
 
 encoded_upload = st.file_uploader("Upload encoded PNG", type=["png"])
 
-if st.button("Decode Now"):
+decode_pressed = st.button("Decode Now")
+reset_pressed = st.button("Reset")
+
+if reset_pressed:
+    st.experimental_rerun()
+
+if decode_pressed:
     if encoded_upload:
         t = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
         Image.open(encoded_upload).convert("RGB").save(t.name)
 
         result = reveal_text(t.name)
-        st.success("Extracted text:")
-        st.code(result)
 
-        if result.startswith("http"):
-            st.markdown(f"[Open Link]({result})")
+        if not result:
+            st.error("No hidden text found.")
+        else:
+            # hide extracted text if it's a link
+            if result.startswith("http://") or result.startswith("https://"):
+                st.success("Link extracted successfully!")
+                
+                # button instead of showing raw URL
+                if st.button("🔗 Open Link"):
+                    webbrowser.open_new_tab(result)
 
+                # auto-open
+                try:
+                    webbrowser.open_new_tab(result)
+                except:
+                    pass
+
+            else:
+                st.success("Extracted Text:")
+                st.code(result)
     else:
         st.error("Please upload an encoded PNG.")
 

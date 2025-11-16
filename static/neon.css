@@ -85,3 +85,24 @@ header[data-testid="stHeader"] {
     color: #000 !important;
 }
 
+/* Make uploader label text white */
+label, .stFileUploader label {
+    color: #ffffff !important;
+}
+
+
+/* Drag & Drop zone main text white */
+[data-testid="stFileUploaderDropzone"] div {
+    color: #ffffff !important;
+}
+
+/* Inner texts inside dropzone */
+[data-testid="stFileUploaderDropzone"] * {
+    color: #ffffff !important;
+}
+
+/* 'Upload Cover PNG' style (Streamlit wraps it in a div) */
+[data-testid="stFileUploader"] > div > div {
+    color: #ffffff !important;
+}
+

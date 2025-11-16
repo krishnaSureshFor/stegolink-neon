@@ -1,4 +1,4 @@
-/* static/love.css - pink couples theme for Memory Card pages */
+/* static/love.css - pink couples theme */
 
 body {
     background: linear-gradient(135deg, #ffb3c6 0%, #ff8fb3 50%, #ff6a97 100%) !important;
@@ -6,6 +6,7 @@ body {
     color: #fff !important;
 }
 
+/* title */
 .love-title {
     text-align:center;
     font-size: 2.4rem;
@@ -15,15 +16,17 @@ body {
     margin-bottom: 6px;
 }
 
+/* card surface */
 .love-card {
     background: rgba(255,255,255,0.18);
     backdrop-filter: blur(12px);
-    border-radius: 18px;
-    padding: 20px;
-    margin-top: 12px;
+    border-radius: 20px;
+    padding: 22px;
+    margin-top: 16px;
     box-shadow: 0 10px 45px rgba(255,82,129,0.18);
 }
 
+/* classic love button (old style, still usable) */
 .love-button {
     display:inline-block;
     padding: 12px 20px;
@@ -31,11 +34,23 @@ body {
     color: #fff !important;
     font-weight: 700;
     border-radius: 12px;
-    text-decoration: none;
+    text-decoration: none !important;
     box-shadow: 0 10px 30px rgba(255,80,150,0.35);
     margin-top: 10px;
 }
 
 .love-button:hover {
     transform: translateY(-3px);
+}
+
+/* NEW share-btn style */
+.share-btn {
+    background: linear-gradient(90deg,#ff0066,#ff4f9f) !important;
+    color: #fff !important;
+    font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 12px;
+    display:inline-block;
+    box-shadow: 0 8px 25px rgba(255,0,120,0.35);
+    text-decoration: none !important;
 }

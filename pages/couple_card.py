@@ -11,7 +11,7 @@ IMGBB_API_KEY = os.environ.get("IMGBB_API_KEY", "")
 
 def upload_to_imgbb(path):
     if not IMGBB_API_KEY:
-        st.error("⚠️ ImgBB key not found. Add IMGBB_API_KEY in secrets/settings.")
+        st.error("⚠️ ImgBB API key missing. Add IMGBB_API_KEY in Streamlit Secrets.")
         return None
 
     with open(path, "rb") as f:
@@ -36,7 +36,7 @@ def upload_to_imgbb(path):
 
 def render():
 
-    # Load pink theme
+    # Load love theme
     try:
         with open("static/love.css", "r") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -45,10 +45,10 @@ def render():
 
     st.markdown("<h1 class='love-title'>💖 Create Your Memory Card</h1>", unsafe_allow_html=True)
 
-    st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
+    st.markdown("<div class='love-card'>", unsafe_allow_html=True)
 
     # -------------------------------------------------
-    # Upload main picture
+    # Main picture
     # -------------------------------------------------
     main = st.file_uploader("Upload Main Picture", type=["png", "jpg", "jpeg"])
 
@@ -56,7 +56,7 @@ def render():
         st.image(main, caption="Main Picture", width=260)
 
     # -------------------------------------------------
-    # Upload extra pictures
+    # Extra pictures
     # -------------------------------------------------
     extras = st.file_uploader(
         "Upload 5 Extra Pictures",
@@ -64,14 +64,12 @@ def render():
         type=["png", "jpg", "jpeg"]
     )
 
-    # --------------------------------------------------------
-    #     Show thumbnails preview (3×2 grid)
-    # --------------------------------------------------------
+    # ---------------------- THUMBNAILS ----------------------
     if extras:
         st.markdown("""
-            <div style='font-size:1.1rem; font-weight:600; margin-top:10px;'>
-                Extra Photos Preview
-            </div>
+        <div style='font-size:1.1rem;font-weight:600;margin-top:12px;'>
+            Extra Photo Preview
+        </div>
         """, unsafe_allow_html=True)
 
         cols = st.columns(3)
@@ -82,29 +80,24 @@ def render():
             cols[i % 3].image(img)
 
         st.markdown("<hr>", unsafe_allow_html=True)
-
         st.subheader("Tap a Photo to Preview")
 
-        prev_cols = st.columns(3)
+        preview_cols = st.columns(3)
         for i, f in enumerate(extras):
-            if prev_cols[i % 3].button(f"Preview {i+1}"):
+            if preview_cols[i % 3].button(f"Preview {i+1}"):
                 st.image(Image.open(f), width=330)
 
-
-    # --------------------------------------------------------
-    # Message + Expiry Duration
-    # --------------------------------------------------------
+    # -------------------------------------------------
+    # Message + expiry
+    # -------------------------------------------------
     msg = st.text_area("Enter Your Message ❤️")
     expiry = st.selectbox("Expiry Time", ["10 Minutes", "1 Hour", "1 Day", "7 Days"])
 
-    # --------------------------------------------------------
-    # Generate Memory Card
-    # --------------------------------------------------------
     generate = st.button("Generate Memory Card ❤️", use_container_width=True)
 
     if generate:
 
-        # Validate inputs
+        # Validate
         if not main:
             st.error("Upload main picture.")
             return
@@ -115,11 +108,11 @@ def render():
             st.error("Enter a message ❤️")
             return
 
-        # Save main image
+        # Save main
         tmp_main = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
         Image.open(main).convert("RGB").save(tmp_main.name)
 
-        # Encode message into main picture
+        # Encode text
         encoded_path = "encoded_memory.png"
         try:
             hide_text(tmp_main.name, msg, encoded_path)
@@ -127,9 +120,9 @@ def render():
             st.error(f"Encoding failed: {e}")
             return
 
-        st.info("Uploading your pictures… this may take a few seconds 💞")
+        st.info("Uploading your pictures… 💞")
 
-        # Upload main encoded picture
+        # Upload main
         main_url = upload_to_imgbb(encoded_path)
         if not main_url:
             return
@@ -144,7 +137,7 @@ def render():
                 return
             extra_urls.append(url)
 
-        # Expiry timestamp
+        # Expiry
         now = int(time.time())
         expiry_map = {
             "10 Minutes": 600,
@@ -152,13 +145,14 @@ def render():
             "1 Day": 86400,
             "7 Days": 604800
         }
-        exp_ts = now + expiry_map.get(expiry, 3600)
+        exp_ts = now + expiry_map.get(expiry, 600)
 
         # Encode message
         encoded_msg = quote_plus(msg.strip())
 
-        # Public viewer link
+        # Final link
         base = st.secrets.get("APP_BASE_URL") if "APP_BASE_URL" in st.secrets else ""
+
         if base:
             view_url = (
                 f"{base}?view=1&img={main_url}"
@@ -174,12 +168,31 @@ def render():
                 f"&msg={encoded_msg}&exp={exp_ts}"
             )
 
+        # ----------------------------
+        # SUCCESS UI
+        # ----------------------------
         st.success("🎉 Memory Card Created Successfully!")
 
-        # --------------------------------------------------------
-        #          VIEW + SHARE + COPY (ALL IN SAME ROW)
-        # --------------------------------------------------------
+        # ----------------------------
+        # VIEW & SHARE ROW
+        # ----------------------------
         st.markdown(f"""
+        <style>
+        .share-btn {{
+            background: linear-gradient(90deg,#ff0066,#ff4f9f);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: none;
+            color: #fff !important;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            text-decoration: none !important;
+            display:inline-block;
+            box-shadow: 0 8px 25px rgba(255,0,120,0.35);
+        }}
+        </style>
+
         <div style="
             display:flex;
             flex-wrap:wrap;
@@ -187,35 +200,36 @@ def render():
             justify-content:center;
             margin-top:20px;
         ">
-            <!-- VIEW BUTTON -->
-            <a href="{view_url}" target="_blank">
-                <button class="love-button">💌 View Memory Card</button>
+
+            <a href="{view_url}" target="_blank" class="share-btn">
+                💌 View Memory Card
             </a>
 
-            <!-- COPY BUTTON -->
-            <button class="love-button" onclick="copyToClipboard()">📋 Copy Link</button>
+            <button class="share-btn" onclick="copyToClipboard()">
+                📋 Copy Link
+            </button>
 
-            <!-- WHATSAPP -->
-            <a href="https://wa.me/?text=💖 Check this Memory Card: {view_url}" target="_blank">
-                <button class="love-button">💬 WhatsApp</button>
+            <a href="https://wa.me/?text=💖 Check this Memory Card: {view_url}"
+               target="_blank" class="share-btn">
+                💬 WhatsApp
             </a>
 
-            <!-- INSTAGRAM -->
-            <a href="{view_url}" target="_blank">
-                <button class="love-button">📸 Instagram</button>
+            <a href="{view_url}" target="_blank" class="share-btn">
+                📸 Instagram
             </a>
 
-            <!-- SMS -->
-            <a href="sms:?body=Check this Memory Card ❤️ {view_url}" target="_blank">
-                <button class="love-button">📱 Messages</button>
+            <a href="sms:?body=Check this Memory Card ❤️ {view_url}"
+               target="_blank" class="share-btn">
+                📱 Messages
             </a>
+
         </div>
 
         <script>
-        function copyToClipboard() {
+        function copyToClipboard() {{
             navigator.clipboard.writeText("{view_url}");
             alert("✔ Link copied to clipboard!");
-        }
+        }}
         </script>
         """, unsafe_allow_html=True)
 

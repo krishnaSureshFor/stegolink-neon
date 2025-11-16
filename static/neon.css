@@ -67,6 +67,42 @@ input, textarea, .stTextInput input {
     box-shadow: 0 0 20px rgba(0,200,255,0.55);
 }
 
+/* ---------------------------
+   Uploader: dropzone white, button black
+   Place this at the BOTTOM of neon.css
+   --------------------------- */
+
+/* 1) Make all dropzone (drag & drop) texts white */
+[data-testid="stFileUploaderDropzone"], 
+[data-testid="stFileUploaderDropzone"] * {
+  color: #ffffff !important;
+}
+
+/* 2) Keep label/title text white (Upload Cover PNG etc.) */
+[data-testid="stFileUploader"] > div > div,
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] span {
+  color: #ffffff !important;
+}
+
+/* 3) But force the actual "Browse files" button to be black text on a light bg.
+   Use a more specific selector so it wins over the white rules above. */
+[data-testid="stFileUploader"] section div button,
+[data-testid="stFileUploader"] button {
+  color: #000000 !important;                       /* black text */
+  background: rgba(255,255,255,0.92) !important;   /* light background so black is readable */
+  border-radius: 10px !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: none !important;
+}
+
+/* 4) Improve button contrast slightly (optional) */
+[data-testid="stFileUploader"] section div button:hover,
+[data-testid="stFileUploader"] button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08) !important;
+}
+
 /* Fix top white shadow bar */
 header[data-testid="stHeader"] {
     background: transparent !important;

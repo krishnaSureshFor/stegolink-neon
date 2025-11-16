@@ -9,10 +9,10 @@ from urllib.parse import quote_plus
 IMGBB_API_KEY = os.environ.get("IMGBB_API_KEY", "")
 
 
-# ------------------ Upload to ImgBB ------------------
+# --------------- Upload to ImgBB ---------------
 def upload_to_imgbb(path):
     if not IMGBB_API_KEY:
-        st.error("⚠️ ImgBB API key missing. Add IMGBB_API_KEY in Secrets.")
+        st.error("⚠️ ImgBB API key missing. Add IMGBB_API_KEY in Streamlit Secrets.")
         return None
 
     with open(path, "rb") as f:
@@ -25,7 +25,6 @@ def upload_to_imgbb(path):
         res = requests.post(url, data=payload, timeout=20).json()
         if res.get("success"):
             return res["data"]["url"]
-        st.error("ImgBB upload failed.")
         return None
 
     except Exception as e:
@@ -34,10 +33,10 @@ def upload_to_imgbb(path):
 
 
 
-# ------------------ RENDER PAGE ------------------
+# ----------------- RENDER PAGE -----------------
 def render():
 
-    # Load theme
+    # Load love theme
     try:
         with open("static/love.css", "r") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -49,7 +48,7 @@ def render():
     st.markdown("<div class='love-card'>", unsafe_allow_html=True)
 
     # -------------------------------------------------
-    # Main picture
+    # Main image
     # -------------------------------------------------
     main = st.file_uploader("Upload Main Picture", type=["png", "jpg", "jpeg"])
 
@@ -57,7 +56,7 @@ def render():
         st.image(main, width=260)
 
     # -------------------------------------------------
-    # Extra pictures
+    # Extra images
     # -------------------------------------------------
     extras = st.file_uploader("Upload 5 Extra Pictures",
                               accept_multiple_files=True,
@@ -86,7 +85,7 @@ def render():
                 st.image(Image.open(f), width=330)
 
     # -------------------------------------------------
-    # Message + expiry
+    # Message + Expiry
     # -------------------------------------------------
     msg = st.text_area("Enter Your Message ❤️")
     expiry = st.selectbox("Expiry Time",
@@ -107,26 +106,22 @@ def render():
             st.error("Enter a message ❤️")
             return
 
-        # Save main
+        # Save main image
         tmp_main = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
         Image.open(main).convert("RGB").save(tmp_main.name)
 
-        # Encode text
+        # Encode message
         encoded_path = "encoded_memory.png"
-        try:
-            hide_text(tmp_main.name, msg, encoded_path)
-        except Exception as e:
-            st.error(f"Encoding failed: {e}")
-            return
+        hide_text(tmp_main.name, msg, encoded_path)
 
         st.info("Uploading your pictures… 💞")
 
-        # Upload main encoded picture
+        # Upload main
         main_url = upload_to_imgbb(encoded_path)
         if not main_url:
             return
 
-        # Upload 5 extras
+        # Upload extras
         extra_urls = []
         for f in extras:
             t = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
@@ -146,12 +141,10 @@ def render():
         }
         exp_ts = now + expiry_map[expiry]
 
-        # Encode message
         encoded_msg = quote_plus(msg.strip())
 
-        # Final public link
+        # Final viewer link
         base = st.secrets.get("APP_BASE_URL") if "APP_BASE_URL" in st.secrets else ""
-
         if base:
             view_url = (
                 f"{base}?view=1&img={main_url}"
@@ -169,7 +162,9 @@ def render():
 
         st.success("🎉 Memory Card Created Successfully!")
 
-        # ---------------------------- SHARE ROW ----------------------------
+        # =========================================================
+        #      SHARE ROW — FIXED & INSIDE CARD (NOW VISIBLE)
+        # =========================================================
         st.markdown(f"""
         <style>
         .share-btn {{
@@ -220,4 +215,5 @@ def render():
         </div>
         """, unsafe_allow_html=True)
 
+    # CLOSING love-card div (KEEP THIS LAST)
     st.markdown("</div>", unsafe_allow_html=True)

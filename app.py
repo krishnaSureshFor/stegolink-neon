@@ -2,6 +2,30 @@ import streamlit as st
 from PIL import Image
 import tempfile, os, webbrowser
 from stego.simple_lsb import hide_text, reveal_text
+import streamlit as st
+from urllib.parse import unquote
+
+query = st.experimental_get_query_params()
+
+if "view" in query:
+    img = query.get("img", [""])[0]
+    msg = query.get("msg", [""])[0]
+    a1 = query.get("a1", [""])[0]
+    a2 = query.get("a2", [""])[0]
+    a3 = query.get("a3", [""])[0]
+    a4 = query.get("a4", [""])[0]
+    a5 = query.get("a5", [""])[0]
+
+    st.markdown("<h1 class='love-title'>💖 Your Memory Card 💖</h1>", unsafe_allow_html=True)
+
+    st.image(img, caption="Your Encoded Memory Image 💕")
+
+    st.markdown(f"<div class='love-card'><p>{unquote(msg)}</p></div>", unsafe_allow_html=True)
+
+    st.subheader("Your Extra Moments 💞")
+    st.image([a1, a2, a3, a4, a5], width=250)
+
+    st.stop()
 
 st.set_page_config(page_title="StegoLink Glass", layout="wide")
 

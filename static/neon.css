@@ -72,3 +72,16 @@ header[data-testid="stHeader"] {
     background: transparent !important;
     height: 0;
 }
+
+/* Make "Browse files" text black */
+[data-testid="stFileUploader"] section div button {
+    color: #000 !important;             /* text color */
+    background: rgba(255,255,255,0.8) !important;  /* optional: lighter background */
+    border-radius: 10px !important;
+}
+
+/* Make other uploader text black */
+[data-testid="stFileUploader"] * {
+    color: #000 !important;
+}
+

@@ -1,57 +1,74 @@
-/* -------------------------------
-   Glassmorphism Neon UI FIXED
-   ------------------------------- */
+/* ---------------------------
+   TRUE Glassmorphism UI Fix
+   --------------------------- */
 
-body {
-    background: radial-gradient(circle at 10% 10%, rgba(0, 200, 255, 0.12), transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(180, 0, 255, 0.15), transparent 40%),
-                linear-gradient(135deg, #0b0f19, #0d1222);
-    background-size: 200% 200%;
-    animation: bgMove 18s ease infinite;
-    color: #e8f5ff !important;
+html, body, .main, [data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #0d1117 0%, #0f1620 50%, #0b0f19 100%);
+    color: #e6f0ff !important;
 }
 
-@keyframes bgMove {
-    0% { background-position: 0% 0%; }
-    50% { background-position: 100% 100%; }
-    100% { background-position: 0% 0%; }
+/* Fix Streamlit default white blocks */
+[data-testid="stSidebar"] {
+    background: rgba(255,255,255,0.04) !important;
+    backdrop-filter: blur(18px);
+    border-right: 1px solid rgba(255,255,255,0.15);
 }
 
-/* Sidebar text fix */
-section[data-testid="stSidebar"] * {
-    color: #e8f5ff !important;
+/* Sidebar text visibility */
+[data-testid="stSidebar"] * {
+    color: #e8f7ff !important;
 }
 
-/* glass cards */
+/* Center container cards */
 .glass-card {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px);
-    border-radius: 18px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(14px);
+    border-radius: 16px;
     padding: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+    margin-top: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
 }
 
-/* input text visible */
-input, textarea {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+/* Input fields */
+input, textarea, .stTextInput input {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
     color: #ffffff !important;
-    border-radius: 10px !important;
+    border-radius: 12px !important;
+    padding: 10px !important;
+}
+
+/* Upload box fix */
+[data-testid="stFileUploaderDropzone"] {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.20) !important;
+    backdrop-filter: blur(6px);
+}
+
+[data-testid="stFileUploaderDropzone"] * {
+    color: #fff !important;
 }
 
 /* Buttons */
 .stButton > button {
-    background: linear-gradient(90deg, #00eaff, #802bff);
+    background: linear-gradient(90deg, #00eaff, #9c4dff);
     color: white;
-    padding: 10px 18px;
+    font-weight: 700;
     border-radius: 12px;
     border: none;
-    font-weight: 700;
-    transition: 0.25s;
+    padding: 10px 18px;
+    box-shadow: 0 0 12px rgba(0,200,255,0.35);
+    transition: 0.25s ease;
 }
 
 .stButton > button:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 0px 20px rgba(0, 220, 255, 0.45);
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(0,200,255,0.55);
+}
+
+/* Fix top white shadow bar */
+header[data-testid="stHeader"] {
+    background: transparent !important;
+    height: 0;
 }

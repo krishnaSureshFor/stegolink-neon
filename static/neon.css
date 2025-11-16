@@ -87,3 +87,22 @@ code, .stCode { color: #00eaff !important; font-weight: 600; }
 
 /* Titles gradient */
 h1, h2, h3 { background: linear-gradient(90deg, #00eaff, #b400ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+/* REMOVE SIDEBAR COMPLETELY */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+.menu-btn {
+    background: linear-gradient(90deg, #00eaff, #a34dff);
+    color: white;
+    font-weight: 700;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.menu-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 18px rgba(0,220,255,0.55);
+}

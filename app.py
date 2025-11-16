@@ -72,40 +72,19 @@ if "view" in query:
     st.stop()  # stop further rendering (public view handled)
 
 
-# --------------- Top horizontal menu (single-file routing) ---------------
-# custom menu bar (centered)
+# ------------------ TOP MENU (Single Clean Version) ------------------
+
 st.markdown("""
-<div style="display:flex; gap:18px; justify-content:center; align-items:center; margin-top:12px; margin-bottom:18px;">
-  <button id="btn-hide" onclick="window.streamlitRun && window.streamlitRun('menu_hide')" class="menu-btn">Hide Link</button>
-  <button id="btn-couple" onclick="window.streamlitRun && window.streamlitRun('menu_couple')" class="menu-btn">Secret Love Card</button>
-  <button id="btn-contact" onclick="window.streamlitRun && window.streamlitRun('menu_contact')" class="menu-btn">Contact Us</button>
+<div style="display:flex; gap:22px; justify-content:center; margin-top:18px; margin-bottom:25px;">
+    <button onclick="window.location.href='/?page=hide'" class="menu-btn">Hide Link</button>
+    <button onclick="window.location.href='/?page=couple'" class="menu-btn">Secret Love Card</button>
+    <button onclick="window.location.href='/?page=contact'" class="menu-btn">Contact Us</button>
 </div>
-<script>
-  // Add a small bridge so Streamlit knows button presses (fallback)
-  window.streamlitRun = function(action) {
-    const kernel = window.parent;
-    // fallback: we can't directly call Streamlit from JS in all runtimes.
-    // Buttons below (st.button) will be used instead.
-    return true;
-  }
-</script>
 """, unsafe_allow_html=True)
 
-# Fallback actual buttons in columns so clicks work reliably in Streamlit
-col1, col2, col3 = st.columns([1,1,1])
-with col1:
-    if st.button("Hide Link"):
-        st.session_state.page = "hide"
-with col2:
-    if st.button("Secret Love Card"):
-        st.session_state.page = "couple"
-with col3:
-    if st.button("Contact Us"):
-        st.session_state.page = "contact"
-
-if "page" not in st.session_state:
-    st.session_state.page = "hide"
-
+# read page from query parameter
+page = st.experimental_get_query_params().get("page", ["hide"])[0]
+st.session_state.page = page
 # Router render
 if st.session_state.page == "hide":
     hide_link_page.render()

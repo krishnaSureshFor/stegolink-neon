@@ -1,120 +1,89 @@
-/* -------------------------------------------------------
-   FULL GLASSMORPHISM NEON THEME — FINAL STABLE VERSION
-   ------------------------------------------------------- */
+/* static/neon.css
+   Full glassmorphism neon theme (final stable)
+*/
 
-/* Background */
 html, body, .main, [data-testid="stAppViewContainer"] {
     background: linear-gradient(135deg, #0d1117 0%, #0f1620 50%, #0b0f19 100%) !important;
     color: #e8f5ff !important;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Remove the top Streamlit white bar */
-header[data-testid="stHeader"] {
-    background: transparent !important;
-    height: 0px !important;
-}
+/* Remove top Streamlit bar */
+header[data-testid="stHeader"] { background: transparent !important; height: 0 !important; }
 
 /* Sidebar glass */
 [data-testid="stSidebar"] {
     background: rgba(255,255,255,0.05) !important;
     backdrop-filter: blur(16px);
-    border-right: 1px solid rgba(255,255,255,0.15);
+    border-right: 1px solid rgba(255,255,255,0.10);
 }
 
 /* Sidebar text always white */
-[data-testid="stSidebar"] * {
-    color: #e8f5ff !important;
-}
+[data-testid="stSidebar"] * { color: #e8f5ff !important; }
 
-/* Glass card used in main page */
+/* Glass card */
 .glass-card {
-    background: rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.06);
     backdrop-filter: blur(14px);
-    border-radius: 16px;
-    padding: 24px;
-    border: 1px solid rgba(255,255,255,0.14);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
-    margin-top: 12px;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+    margin-bottom: 18px;
 }
 
-/* Input fields — text BLACK */
+/* Inputs — black text for typed content */
 input, textarea, .stTextInput input {
     background: rgba(255,255,255,0.12) !important;
     border: 1px solid rgba(255,255,255,0.25) !important;
-    color: #000000 !important;     /* BLACK TEXT HERE */
-    border-radius: 12px !important;
-    padding: 10px !important;
+    color: #000000 !important;
+    border-radius: 10px !important;
+    padding: 8px !important;
     font-weight: 600;
 }
 
-/* ------------------------------
-   FILE UPLOADER CUSTOMIZATION
-   ------------------------------ */
-
-/* Drag & drop area background */
+/* File uploader dropzone */
 [data-testid="stFileUploaderDropzone"] {
     background: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.20) !important;
-    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    backdrop-filter: blur(6px);
 }
 
-/* Drag & drop text → WHITE */
 [data-testid="stFileUploaderDropzone"] * {
     color: #ffffff !important;
 }
 
-/* Label text (“Upload Cover PNG”, “Upload encoded PNG”) → WHITE */
+/* Uploader label white */
 [data-testid="stFileUploader"] label,
 [data-testid="stFileUploader"] > div > div:first-child,
-[data-testid="stFileUploader"] span {
-    color: #ffffff !important;
-}
+[data-testid="stFileUploader"] span { color: #ffffff !important; }
 
-/* "Browse files" BUTTON → BLACK TEXT + LIGHT BG */
+/* "Browse files" button: black text on light bg */
 [data-testid="stFileUploader"] section div button,
 [data-testid="stFileUploader"] button {
-    color: #000000 !important;                         /* black text */
-    background: rgba(255,255,255,0.89) !important;     /* light BG */
+    color: #000000 !important;
+    background: rgba(255,255,255,0.92) !important;
     font-weight: 700 !important;
-    border-radius: 10px !important;
-    padding: 6px 12px !important;
-    border: 1px solid rgba(0,0,0,0.12) !important;
+    border-radius: 8px !important;
+    padding: 6px 10px !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
 }
 
-/* Hover effect for Browse button */
-[data-testid="stFileUploader"] button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.20) !important;
-}
-
-/* ------------------------------
-   Buttons (Encode / Decode / Reset)
-   ------------------------------ */
+/* Buttons */
 .stButton > button {
-    background: linear-gradient(90deg, #00eaff, #a34dff);
+    background: linear-gradient(90deg, #00eaff, #a34dff) !important;
     color: white !important;
     font-weight: 700;
     border-radius: 12px;
     border: none;
-    padding: 10px 18px;
-    box-shadow: 0px 0px 14px rgba(0,220,255,0.45);
-    transition: 0.25s ease;
+    padding: 10px 16px;
+    box-shadow: 0 0 16px rgba(0,220,255,0.38);
+    transition: transform 0.2s ease;
 }
+.stButton > button:hover { transform: translateY(-3px); box-shadow: 0 0 24px rgba(0,220,255,0.55); }
 
-.stButton > button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0px 0px 22px rgba(0,220,255,0.65);
-}
+/* Code block */
+code, .stCode { color: #00eaff !important; font-weight: 600; }
 
-/* Code block styling */
-code, .stCode {
-    color: #00eaff !important;
-    font-weight: 600;
-}
-
-/* Titles with glowing gradient */
-h1, h2, h3 {
-    background: linear-gradient(90deg, #00eaff, #b400ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+/* Titles gradient */
+h1, h2, h3 { background: linear-gradient(90deg, #00eaff, #b400ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }

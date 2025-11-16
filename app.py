@@ -1,11 +1,6 @@
-# ------------------------------ app.py ------------------------------
 import streamlit as st
 from urllib.parse import unquote_plus
 import time
-import os
-
-# Import page modules
-from pages import hide_link_page, couple_card, contact
 
 st.set_page_config(
     page_title="StegoLink",
@@ -13,7 +8,9 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Load global neon glass theme
+from pages import hide_link_page, couple_card, contact
+
+# Load neon CSS
 try:
     with open("static/neon.css", "r") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -21,13 +18,11 @@ except:
     pass
 
 
-# ---------------------------------------------------------
-#        PUBLIC VIEW (Memory Card opened via link)
-# ---------------------------------------------------------
+# --------------------- PUBLIC VIEW PAGE ---------------------
 query = st.experimental_get_query_params()
 if "view" in query:
     try:
-        with open("static/love.css", "r") as f:
+        with open("static/love.css") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     except:
         pass
@@ -43,7 +38,7 @@ if "view" in query:
 
     st.markdown("<h1 class='love-title'>💖 Your Memory Card 💖</h1>", unsafe_allow_html=True)
 
-    # --------- Expiration check ---------
+    # expiration check
     now = int(time.time())
     try:
         exp_ts = int(exp)
@@ -51,60 +46,56 @@ if "view" in query:
         exp_ts = now + 10
 
     if exp_ts < now:
-        st.error("This memory card link has expired.")
+        st.error("This link has expired.")
         st.stop()
 
-    # --------- Render content ---------
-    if img:
-        st.image(img, use_column_width=True)
-    else:
-        st.warning("Main image missing.")
+    st.image(img, use_column_width=True)
 
-    try:
-        msg = unquote_plus(raw_msg)
-        st.markdown(f"""
-        <div style='background:rgba(255,255,255,0.20);
-                    padding:18px;border-radius:12px;
-                    margin-top:12px;font-size:1.2rem;'>
-            {msg}
-        </div>
-        """, unsafe_allow_html=True)
-    except:
-        pass
+    message = unquote_plus(raw_msg)
+    st.markdown(
+        f"<div style='padding:15px;border-radius:12px;background:rgba(255,255,255,0.25)'>{message}</div>",
+        unsafe_allow_html=True,
+    )
 
+    extra = [a for a in [a1, a2, a3, a4, a5] if a]
     st.subheader("Extra Moments 💞")
-    extra_urls = [u for u in [a1, a2, a3, a4, a5] if u]
-
-    if extra_urls:
-        st.image(extra_urls, width=230)
-    else:
-        st.info("No extra images found.")
+    st.image(extra, width=220)
 
     st.stop()
 
 
-# ---------------------------------------------------------
-#          TOP MENU (Single Clean Version)
-# ---------------------------------------------------------
-st.markdown("""
-<div style="display:flex; gap:22px; justify-content:center; margin-top:22px; margin-bottom:30px;">
-    <button onclick="window.location.href='/?page=hide'" class="menu-btn">Hide Link</button>
-    <button onclick="window.location.href='/?page=couple'" class="menu-btn">Secret Love Card</button>
-    <button onclick="window.location.href='/?page=contact'" class="menu-btn">Contact Us</button>
-</div>
-""", unsafe_allow_html=True)
 
-# Read active page from URL
+# -------------- WORKING TOP MENU (STREAMLIT BUTTONS) --------------
+col1, col2, col3 = st.columns([1,1,1])
+
+with col1:
+    if st.button("Hide Link"):
+        st.session_state.page = "hide"
+        st.experimental_set_query_params(page="hide")
+
+with col2:
+    if st.button("Secret Love Card"):
+        st.session_state.page = "couple"
+        st.experimental_set_query_params(page="couple")
+
+with col3:
+    if st.button("Contact Us"):
+        st.session_state.page = "contact"
+        st.experimental_set_query_params(page="contact")
+
+
+# determine page
 page = st.experimental_get_query_params().get("page", ["hide"])[0]
 st.session_state.page = page
 
 
-# ---------------------------------------------------------
-#                       ROUTER
-# ---------------------------------------------------------
+
+# ------------------------- PAGE ROUTER -------------------------
 if page == "hide":
     hide_link_page.render()
+
 elif page == "couple":
     couple_card.render()
+
 else:
     contact.render()

@@ -1,55 +1,16 @@
-/* static/love.css - pink couples theme */
-
-body {
-    background: linear-gradient(135deg, #ffb3c6 0%, #ff8fb3 50%, #ff6a97 100%) !important;
-    font-family: "Segoe UI", Roboto, sans-serif;
-    color: #fff !important;
-}
+/* Couple Card creator page */
 
 .love-title {
-    text-align:center;
-    font-size: 2.4rem;
-    font-weight: 900;
-    color: #fff;
-    text-shadow: 0 0 12px rgba(255,255,255,0.35);
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 10px;
 }
 
 .love-card {
-    background: rgba(255,255,255,0.18);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 22px;
-    margin-top: 16px;
-    box-shadow: 0 10px 45px rgba(255,82,129,0.18);
-}
-
-.love-button {
-    display:inline-block;
-    padding: 12px 20px;
-    background: linear-gradient(90deg,#ff4f81,#ff8db7);
-    color: #fff !important;
-    font-weight: 700;
-    border-radius: 12px;
-    text-decoration: none !important;
-    box-shadow: 0 10px 30px rgba(255,80,150,0.35);
-}
-
-.love-button:hover {
-    transform: translateY(-3px);
-}
-
-/* New share buttons */
-.share-btn {
-    background: linear-gradient(90deg,#ff0066,#ff2f8e) !important;
-    padding: 12px 20px;
-    border-radius: 14px;
-    color: #fff !important;
-    font-weight: 700;
-    display:inline-block;
-    text-decoration:none !important;
-    box-shadow: 0 6px 22px rgba(255,0,120,0.35);
-}
-
-.share-btn:active {
-    transform: scale(0.96);
+    max-width: 420px;
+    margin: auto;
+    padding: 18px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }

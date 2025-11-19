@@ -19,7 +19,6 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.18);
 }
 
-/* MAIN CARD */
 .viewer-card {
     margin-top: 16px;
     width: 100%;
@@ -32,12 +31,10 @@
     box-shadow: 0 10px 35px rgba(0,0,0,0.25);
 }
 
-/* IMAGE INSIDE CARD */
 .viewer-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
 }
 
 /* ARROWS */
@@ -62,7 +59,7 @@
 .left-arrow { left: -22px; }
 .right-arrow { right: -22px; }
 
-/* MESSAGE BOX */
+/* message box */
 .text-box {
     margin-top: 14px;
     background: rgba(255,255,255,0.22);
@@ -72,7 +69,6 @@
     font-weight: 600;
 }
 
-/* EMOJI BAR */
 .emoji-bar {
     margin-top: 20px;
     display: flex;

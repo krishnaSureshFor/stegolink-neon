@@ -1,4 +1,3 @@
-# ------------------------------ app.py ------------------------------
 import streamlit as st
 from urllib.parse import unquote_plus
 import time
@@ -104,16 +103,6 @@ if "view" in query:
         object-fit: cover;
     }
 
-    .text-box {
-        margin-top: 14px;
-        background: rgba(255,255,255,0.22);
-        padding: 14px;
-        border-radius: 14px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        line-height: 1.4;
-    }
-
     .nav-arrow {
         width: 50px;
         height: 50px;
@@ -128,10 +117,22 @@ if "view" in query:
         transform: translateY(-50%);
         box-shadow: 0 5px 18px rgba(0,0,0,0.25);
         cursor: pointer;
+        z-index: 50;
+        user-select: none;
     }
 
     .left-arrow { left: -26px; }
     .right-arrow { right: -26px; }
+
+    .text-box {
+        margin-top: 14px;
+        background: rgba(255,255,255,0.22);
+        padding: 14px;
+        border-radius: 14px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1.4;
+    }
 
     .emoji-bar {
         display: flex;
@@ -187,27 +188,33 @@ if "view" in query:
 
     total = len(all_pics)
 
-    # ARROWS (Python buttons)
-    lw, _, rw = st.columns([1,6,1])
+    # NAVIGATION HANDLER (JS sends nav=prev/next)
+    nav = query.get("nav", [""])[0]
 
-    with lw:
-        if st.button("⬅"):
-            st.session_state.viewer_index = (st.session_state.viewer_index - 1) % total
+    if nav == "prev":
+        st.session_state.viewer_index = (st.session_state.viewer_index - 1) % total
+        st.experimental_set_query_params(view="1")
 
-    with rw:
-        if st.button("➡"):
-            st.session_state.viewer_index = (st.session_state.viewer_index + 1) % total
+    elif nav == "next":
+        st.session_state.viewer_index = (st.session_state.viewer_index + 1) % total
+        st.experimental_set_query_params(view="1")
 
     current_pic = all_pics[st.session_state.viewer_index]
 
-    # MAIN IMAGE CARD
+    # MAIN IMAGE CARD WITH ARROWS INSIDE
     st.markdown(f"""
         <div class='viewer-card'>
+            <div class='nav-arrow left-arrow'
+                 onclick="window.location.search='view=1&nav=prev'">⬅</div>
+
+            <div class='nav-arrow right-arrow'
+                 onclick="window.location.search='view=1&nav=next'">➡</div>
+
             <img src="{current_pic}">
         </div>
     """, unsafe_allow_html=True)
 
-    # MESSAGE BELOW PICTURE (YOUR REQUEST)
+    # MESSAGE BELOW PICTURE
     st.markdown(f"""
         <div class='text-box'>
             {message}
@@ -237,8 +244,8 @@ if "view" in query:
     """, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
-
     st.stop()
+
 
 
 # ---------------------------------------------------------

@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Load main theme
+# Load global neon theme
 try:
     with open("static/neon.css", "r") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -19,20 +19,20 @@ except:
     pass
 
 
-# =====================================================================================
-# PUBLIC VIEW MODE (Memory Card)
-# =====================================================================================
+# ======================================================================
+#  PUBLIC VIEW MODE (Memory Card Viewer)
+# ======================================================================
 query = st.experimental_get_query_params()
 if "view" in query:
 
-    # Load viewer CSS
+    # Load viewer CSS (critical!)
     try:
         with open("static/viewer.css", "r") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-    except:
-        pass
+    except Exception as e:
+        st.write("Viewer CSS error:", e)
 
-    # Read parameters
+    # Read URL params
     main_img = query.get("img", [""])[0]
     extras = [
         query.get("a1", [""])[0],
@@ -54,13 +54,13 @@ if "view" in query:
         expiry_ts = now + 60
 
     if expiry_ts < now:
-        st.error("This memory card has expired.")
+        st.error("This memory card link has expired.")
         st.stop()
 
-    # Decode user message
+    # Decode message text
     message = unquote_plus(raw_msg)
 
-    # Initial image index
+    # Prepare index
     if "viewer_index" not in st.session_state:
         st.session_state.viewer_index = 0
 
@@ -77,13 +77,20 @@ if "view" in query:
 
     current_pic = all_pics[st.session_state.viewer_index]
 
-    # ============= PAGE RENDER =============
-    st.markdown("<div class='viewer-wrap'>", unsafe_allow_html=True)
+    # ================================================================
+    #  FIXED MARKDOWN BLOCK — viewer-wrap + heading TOGETHER
+    # ================================================================
+    st.markdown(
+        """
+<div class='viewer-wrap'>
+    <div class='viewer-heading'>💖 Your Memory Card 💖</div>
+""",
+        unsafe_allow_html=True
+    )
 
-    st.markdown("<div class='viewer-heading'>💖 Your Memory Card 💖</div>",
-                unsafe_allow_html=True)
-
-    # ---- Image + Arrows ----
+    # ================================================================
+    #  IMAGE + ARROWS SECTION
+    # ================================================================
     st.markdown(
         f"""
 <div class="viewer-card">
@@ -96,19 +103,25 @@ if "view" in query:
 
     <img src="{current_pic}">
 </div>
-""", unsafe_allow_html=True)
+""",
+        unsafe_allow_html=True
+    )
 
-    # ---- Message Box ----
+    # ================================================================
+    #  MESSAGE SECTION
+    # ================================================================
     st.markdown(
         f"""
 <div class="text-box">
     {message}
 </div>
 """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
-    # ---- Emoji Shower ----
+    # ================================================================
+    #  EMOJI SHOWER SECTION
+    # ================================================================
     st.markdown(
         """
 <div class="emoji-bar">
@@ -130,16 +143,18 @@ function makeShower(emoji) {
 }
 </script>
 """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
+    # Close viewer-wrap DIV
     st.markdown("</div>", unsafe_allow_html=True)
+
     st.stop()
 
 
-# =====================================================================================
-# NORMAL MODE (Main Menu)
-# =====================================================================================
+# ======================================================================
+#  NORMAL MODE (HOME MENU)
+# ======================================================================
 c1, c2, c3 = st.columns([1, 1, 1])
 
 with c1:

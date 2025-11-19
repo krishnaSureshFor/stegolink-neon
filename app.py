@@ -5,13 +5,18 @@ import os
 
 from pages import hide_link_page, couple_card, contact
 
+# -----------------------------------------------------
+# Streamlit configuration
+# -----------------------------------------------------
 st.set_page_config(
     page_title="StegoLink",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# Load global neon theme
+# -----------------------------------------------------
+# Global Neon Theme
+# -----------------------------------------------------
 try:
     with open("static/neon.css", "r") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -19,34 +24,42 @@ except:
     pass
 
 
-# ======================================================================
-#  PUBLIC VIEW MODE (Memory Card Viewer)
-# ======================================================================
-query = st.experimental_get_query_params()
+# =====================================================================
+#  PUBLIC VIEW MODE (MEMORY CARD VIEWER)
+# =====================================================================
+query = st.query_params        # NEW API (NO DEPRECATION)
+
 if "view" in query:
 
-    # Load viewer CSS (critical!)
+    # -------------------------
+    # Load viewer.css
+    # -------------------------
     try:
         with open("static/viewer.css", "r") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     except Exception as e:
-        st.write("Viewer CSS error:", e)
+        st.markdown(f"<div style='color:red'>CSS LOAD ERROR: {e}</div>", unsafe_allow_html=True)
 
-    # Read URL params
-    main_img = query.get("img", [""])[0]
+    # -------------------------
+    # Extract URL parameters
+    # -------------------------
+    main_img = query.get("img", "")
     extras = [
-        query.get("a1", [""])[0],
-        query.get("a2", [""])[0],
-        query.get("a3", [""])[0],
-        query.get("a4", [""])[0],
-        query.get("a5", [""])[0],
+        query.get("a1", ""),
+        query.get("a2", ""),
+        query.get("a3", ""),
+        query.get("a4", ""),
+        query.get("a5", ""),
     ]
-    all_pics = [main_img] + [x for x in extras if x]
+    extras = [x for x in extras if x]
+    all_pics = [main_img] + extras
 
-    raw_msg = query.get("msg", [""])[0]
-    expiry_raw = query.get("exp", ["0"])[0]
+    message = query.get("msg", "")
+    expiry_raw = query.get("exp", "0")
 
-    # Validate expiry
+    # -------------------------
+    # Expiry validation
+    # -------------------------
     now = int(time.time())
     try:
         expiry_ts = int(expiry_raw)
@@ -57,29 +70,28 @@ if "view" in query:
         st.error("This memory card link has expired.")
         st.stop()
 
-    # Decode message text
-    message = unquote_plus(raw_msg)
-
-    # Prepare index
+    # -------------------------
+    # Navigation index
+    # -------------------------
     if "viewer_index" not in st.session_state:
         st.session_state.viewer_index = 0
 
-    nav = query.get("nav", [""])[0]
+    nav = query.get("nav", "")
     total = len(all_pics)
 
     if nav == "prev":
         st.session_state.viewer_index = (st.session_state.viewer_index - 1) % total
-        st.experimental_set_query_params(view="1")
+        st.query_params = {"view": "1"}
 
     elif nav == "next":
         st.session_state.viewer_index = (st.session_state.viewer_index + 1) % total
-        st.experimental_set_query_params(view="1")
+        st.query_params = {"view": "1"}
 
     current_pic = all_pics[st.session_state.viewer_index]
 
-    # ================================================================
-    #  FIXED MARKDOWN BLOCK — viewer-wrap + heading TOGETHER
-    # ================================================================
+    # ==================================================================
+    # Viewer Layout  (DO NOT SPLIT THE FIRST HTML BLOCK)
+    # ==================================================================
     st.markdown(
         """
 <div class='viewer-wrap'>
@@ -88,18 +100,18 @@ if "view" in query:
         unsafe_allow_html=True
     )
 
-    # ================================================================
-    #  IMAGE + ARROWS SECTION
-    # ================================================================
+    # -------------------------
+    # Image + Arrows
+    # -------------------------
     st.markdown(
         f"""
 <div class="viewer-card">
 
     <div class="nav-arrow left-arrow"
-         onclick="window.location.search='view=1&nav=prev'">⬅</div>
+         onclick="window.location.search='?view=1&nav=prev'">⬅</div>
 
     <div class="nav-arrow right-arrow"
-         onclick="window.location.search='view=1&nav=next'">➡</div>
+         onclick="window.location.search='?view=1&nav=next'">➡</div>
 
     <img src="{current_pic}">
 </div>
@@ -107,9 +119,9 @@ if "view" in query:
         unsafe_allow_html=True
     )
 
-    # ================================================================
-    #  MESSAGE SECTION
-    # ================================================================
+    # -------------------------
+    # Message box
+    # -------------------------
     st.markdown(
         f"""
 <div class="text-box">
@@ -119,9 +131,9 @@ if "view" in query:
         unsafe_allow_html=True
     )
 
-    # ================================================================
-    #  EMOJI SHOWER SECTION
-    # ================================================================
+    # -------------------------
+    # Emoji shower
+    # -------------------------
     st.markdown(
         """
 <div class="emoji-bar">
@@ -142,41 +154,44 @@ function makeShower(emoji) {
     }
 }
 </script>
+
+</div>   <!-- closes viewer-wrap -->
 """,
         unsafe_allow_html=True
     )
 
-    # Close viewer-wrap DIV
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.stop()
+    st.stop()   # END VIEWER MODE
 
 
-# ======================================================================
-#  NORMAL MODE (HOME MENU)
-# ======================================================================
+# =====================================================================
+#  MAIN MENU (NORMAL MODE)
+# =====================================================================
+
 c1, c2, c3 = st.columns([1, 1, 1])
 
 with c1:
     if st.button("Hide Link"):
-        st.session_state.page = "hide"
-        st.experimental_set_query_params(page="hide")
+        st.query_params = {"page": "hide"}
 
 with c2:
     if st.button("Secret Love Card"):
-        st.session_state.page = "couple"
-        st.experimental_set_query_params(page="couple")
+        st.query_params = {"page": "couple"}
 
 with c3:
     if st.button("Contact Us"):
-        st.session_state.page = "contact"
-        st.experimental_set_query_params(page="contact")
+        st.query_params = {"page": "contact"}
 
-page = st.experimental_get_query_params().get("page", ["hide"])[0]
+page = st.query_params.get("page", "hide")
+
+# =====================================================================
+#  ROUTER
+# =====================================================================
 
 if page == "hide":
     hide_link_page.render()
+
 elif page == "couple":
     couple_card.render()
+
 else:
     contact.render()
